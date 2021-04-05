@@ -3,6 +3,7 @@ package com.desarrollo.taller.controladores;
 import com.desarrollo.taller.modelos.DetalleLibro;
 import com.desarrollo.taller.modelos.Libro;
 import com.desarrollo.taller.servicios.libro.ServicioLibro;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -96,9 +97,11 @@ public class LibroControlador {
     }
 
     @GetMapping(value = "/autor", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Libro>> buscarLibrosPorAutor(@RequestBody String nombreAutor,
-                                                             @RequestBody String apellidoAutor) {
+    public ResponseEntity<List<Libro>> buscarLibrosPorAutor(@RequestBody ObjectNode object) {
         List<Libro> respuesta = null;
+        String nombreAutor = object.get("nombreAutor").asText();
+        String apellidoAutor = object.get("apellidoAutor").asText();
+
         HttpStatus codigo = HttpStatus.FORBIDDEN;
         try {
             respuesta = this.servicioLibro.obtenerLibrosPorAutor(nombreAutor, apellidoAutor);
