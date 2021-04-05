@@ -1,5 +1,6 @@
 # Taller-Desarrollo-Web
 Taller 1 Desarrollo Web Java Spring
+
 Nombres: Stiven Gonzalez & John Gonzalez
 
 # Ejemplos de Ejecución
@@ -18,7 +19,7 @@ Body:
     "precio": 100000,
     "nombreAutor": "Mario",
     "apellidoAutor": "Mendoza",
-    "year": 2020,
+    "year": 2020
 }
 
 Punto 2:
