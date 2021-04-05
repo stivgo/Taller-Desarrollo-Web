@@ -1,6 +1,6 @@
 package com.desarrollo.taller.controladores;
 
-import com.desarrollo.taller.modelos.Autor;
+import com.desarrollo.taller.modelos.DetalleLibro;
 import com.desarrollo.taller.modelos.Libro;
 import com.desarrollo.taller.servicios.libro.ServicioLibro;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,12 @@ import static com.desarrollo.taller.TallerApplication.LOGGER;
 public class LibroControlador {
 
     private ServicioLibro servicioLibro;
+
     @Autowired
     public LibroControlador(ServicioLibro servicioLibro) {
         this.servicioLibro = servicioLibro;
     }
+
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Libro>> obtenerLibros(){
         List<Libro> libros = null;
@@ -49,7 +51,6 @@ public class LibroControlador {
             LOGGER.error("LibroControlador.obtenerLibro Cause: " + e.getMessage());
         }
         return ResponseEntity.status(codigo).body(libro);
-
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,7 +58,7 @@ public class LibroControlador {
         HttpStatus codigo = HttpStatus.FORBIDDEN;
         long id = 0;
         try {
-            libro = this.servicioLibro.nuevoLibro(libro);
+            libro = this.servicioLibro.agregarNuevoLibro(libro);
             codigo = HttpStatus.OK;
         }
         catch (Exception e) {
@@ -78,5 +79,34 @@ public class LibroControlador {
             LOGGER.error("ProductController.nuevoAutor Cause: " + e.getMessage());
         }
         return ResponseEntity.status(codigo).body(libro);
+    }
+
+    @PutMapping(value = "/detalle", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DetalleLibro> detallarLibro(@RequestBody Libro libro, @RequestBody int numeroPaginas) {
+        DetalleLibro respuesta = null;
+        HttpStatus codigo = HttpStatus.FORBIDDEN;
+        try {
+            respuesta = this.servicioLibro.detallarLibro(libro, numeroPaginas);
+            codigo = HttpStatus.OK;
+        }
+        catch (Exception e) {
+            LOGGER.error("ProductController.nuevoAutor Cause: " + e.getMessage());
+        }
+        return ResponseEntity.status(codigo).body(respuesta);
+    }
+
+    @GetMapping(value = "/autor", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Libro>> buscarLibrosPorAutor(@RequestBody String nombreAutor,
+                                                             @RequestBody String apellidoAutor) {
+        List<Libro> respuesta = null;
+        HttpStatus codigo = HttpStatus.FORBIDDEN;
+        try {
+            respuesta = this.servicioLibro.obtenerLibrosPorAutor(nombreAutor, apellidoAutor);
+            codigo = HttpStatus.OK;
+        }
+        catch (Exception e) {
+            LOGGER.error("ProductController.nuevoAutor Cause: " + e.getMessage());
+        }
+        return ResponseEntity.status(codigo).body(respuesta);
     }
 }
