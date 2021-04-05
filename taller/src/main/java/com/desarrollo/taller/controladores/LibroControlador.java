@@ -1,9 +1,9 @@
 package com.desarrollo.taller.controladores;
 
+import com.desarrollo.taller.modelos.DetalleAutor;
 import com.desarrollo.taller.modelos.DetalleLibro;
 import com.desarrollo.taller.modelos.Libro;
 import com.desarrollo.taller.servicios.libro.ServicioLibro;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -64,6 +64,8 @@ public class LibroControlador {
         }
         catch (Exception e) {
             LOGGER.error("ProductController.nuevoAutor Cause: " + e.getMessage());
+            libro = null;
+
         }
         return ResponseEntity.status(codigo).body(libro);
     }
@@ -82,8 +84,9 @@ public class LibroControlador {
         return ResponseEntity.status(codigo).body(libro);
     }
 
-    @PutMapping(value = "/detalle", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DetalleLibro> detallarLibro(@RequestBody Libro libro, @RequestBody int numeroPaginas) {
+    @PutMapping(value = "/detalle/{idL}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DetalleLibro> detallarLibro(@PathVariable String idL, @RequestBody int numeroPaginas) {
+        Double id = Double.parseDouble(idL);
         DetalleLibro respuesta = null;
         HttpStatus codigo = HttpStatus.FORBIDDEN;
         try {
@@ -97,11 +100,9 @@ public class LibroControlador {
     }
 
     @GetMapping(value = "/autor", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Libro>> buscarLibrosPorAutor(@RequestBody ObjectNode object) {
-        List<Libro> respuesta = null;
-        String nombreAutor = object.get("nombreAutor").asText();
-        String apellidoAutor = object.get("apellidoAutor").asText();
-
+    public ResponseEntity<List<DetalleAutor>> buscarLibrosPorAutor(@RequestParam String nombreAutor,
+                                                                   @RequestParam String apellidoAutor) {
+        List<DetalleAutor> respuesta = null;
         HttpStatus codigo = HttpStatus.FORBIDDEN;
         try {
             respuesta = this.servicioLibro.obtenerLibrosPorAutor(nombreAutor, apellidoAutor);
