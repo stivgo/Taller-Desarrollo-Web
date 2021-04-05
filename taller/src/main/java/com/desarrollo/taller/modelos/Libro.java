@@ -98,17 +98,5 @@ public class Libro {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Libro{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", precio=" + precio +
-                ", nombreAutor='" + nombreAutor + '\'' +
-                ", apellidoAutor='" + apellidoAutor + '\'' +
-                ", year=" + year +
-                ", numeroPaginas=" + numeroPaginas +
-                '}';
-    }
+
 }
