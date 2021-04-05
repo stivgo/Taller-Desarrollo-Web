@@ -51,8 +51,8 @@ public class ServicioLibroImple implements ServicioLibro {
     }
 
     @Override
-    public DetalleLibro detallarLibro(Libro libro, int numeroPaginas) throws  Exception{
-        Libro libroDetallado = obtenerLibro( libro.getId() );
+    public DetalleLibro detallarLibro(double idLibro, int numeroPaginas) throws  Exception{
+        Libro libroDetallado = obtenerLibro( idLibro );
         libroDetallado.modificarNumeroPaginas(numeroPaginas);
         actualizarLibro(libroDetallado.getId(), libroDetallado);
         DetalleLibro detallesLibro = new DetalleLibro( libroDetallado );

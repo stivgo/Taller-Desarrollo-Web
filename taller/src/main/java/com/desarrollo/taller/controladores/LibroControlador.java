@@ -4,6 +4,7 @@ import com.desarrollo.taller.modelos.DetalleAutor;
 import com.desarrollo.taller.modelos.DetalleLibro;
 import com.desarrollo.taller.modelos.Libro;
 import com.desarrollo.taller.servicios.libro.ServicioLibro;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -84,21 +85,6 @@ public class LibroControlador {
         return ResponseEntity.status(codigo).body(libro);
     }
 
-    @PutMapping(value = "/detalle/{idL}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DetalleLibro> detallarLibro(@PathVariable String idL, @RequestBody int numeroPaginas) {
-        Double id = Double.parseDouble(idL);
-        DetalleLibro respuesta = null;
-        HttpStatus codigo = HttpStatus.FORBIDDEN;
-        try {
-            respuesta = this.servicioLibro.detallarLibro(libro, numeroPaginas);
-            codigo = HttpStatus.OK;
-        }
-        catch (Exception e) {
-            LOGGER.error("ProductController.nuevoAutor Cause: " + e.getMessage());
-        }
-        return ResponseEntity.status(codigo).body(respuesta);
-    }
-
     @GetMapping(value = "/autor", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DetalleAutor>> buscarLibrosPorAutor(@RequestParam String nombreAutor,
                                                                    @RequestParam String apellidoAutor) {
@@ -110,6 +96,23 @@ public class LibroControlador {
         }
         catch (Exception e) {
             LOGGER.error("ProductController.nuevoAutor Cause: " + e.getMessage());
+        }
+        return ResponseEntity.status(codigo).body(respuesta);
+    }
+
+    @PutMapping(value = "/detalle/{idL}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DetalleLibro> detallarLibro(@PathVariable String idL, @RequestBody ObjectNode numeroPaginas) {
+        int numeroPaginasInt = numeroPaginas.get("numeroPaginas").asInt();
+        Double id = Double.parseDouble(idL);
+        DetalleLibro respuesta = null;
+        HttpStatus codigo = HttpStatus.FORBIDDEN;
+        try {
+            respuesta = this.servicioLibro.detallarLibro(id, numeroPaginasInt);
+            codigo = HttpStatus.OK;
+        }
+        catch (Exception e) {
+            LOGGER.error("ProductController.nuevoAutor Cause: " + e.getMessage());
+            respuesta = null;
         }
         return ResponseEntity.status(codigo).body(respuesta);
     }
